@@ -45,7 +45,7 @@
     align-items:center;
     justify-content:space-between;
     gap:20px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
   }
   .logo{
     display:flex;
@@ -189,7 +189,7 @@
   }
   .card-media img{
     width:100%; height:100%; object-fit:cover;
-    display:none; /* JS toggles which photo shows */
+    display:none; 
   }
   .card-media img.show{ display:block; }
 
@@ -284,6 +284,7 @@
 
 <header>
   <div class="wrap header-inner">
+    <div class="logo">
       airbnb
     </div>
 
@@ -310,17 +311,17 @@
     </div>
   </div>
 
-  <!-- TOP TABS: switch which section is visible via JS -->
+  <!-- TOP TABS: -->
   <div class="wrap">
     <nav class="top-tabs" id="top-tabs">
       <!-- filled in by JS from the TABS array, see script below -->
     </nav>
   </div>
 
-  <!-- CATEGORY BAR: only shown on the Homes tab, filters listings below -->
+  <!-- CATEGORY BAR -->
   <div class="wrap">
     <nav class="categories" id="categories">
-      <!-- filled in by JS from the CATEGORIES array, see script below -->
+     
     </nav>
   </div>
 </header>
@@ -330,7 +331,7 @@
   <section id="section-homes">
     <p id="results-count"></p>
     <div class="grid" id="listing-grid">
-      <!-- listing cards are built entirely by JS, see renderListings() -->
+      <!-- listing cards  see renderListings() -->
     </div>
   </section>
 
@@ -338,7 +339,7 @@
   <section id="section-experiences" style="display:none">
     <p id="experiences-count"></p>
     <div class="grid" id="experiences-grid">
-      <!-- experience cards built by JS, see renderExperiences() -->
+      <!-- experience see renderExperiences() -->
     </div>
   </section>
 
@@ -346,7 +347,7 @@
   <section id="section-services" style="display:none">
     <p id="services-count"></p>
     <div class="grid" id="services-grid">
-      <!-- service cards built by JS, see renderServices() -->
+      <!-- service see renderServices() -->
     </div>
   </section>
 </main>
@@ -358,8 +359,7 @@
 <script>
 /* 
    an array of listing
-   objects (LISTINGS), and write small functions that turn that data
-   into HTML on the page.*/
+   objects (LISTINGS), */
 
 /*- */
 // Each listing is a plain JS object. "photos" is an array so we can
@@ -465,9 +465,7 @@ const SERVICES = [
 ];
 
 /* 
-   "State" = the few values that can change and should re-draw the
-   page whenever they do. Keeping them in one object makes it obvious
-   what the app is tracking.
+   "State"
 - */
 const state = {
   activeTab: "homes",      // which top-level tab is selected
@@ -481,9 +479,9 @@ LISTINGS.forEach(item => { state.photoIndex[item.id] = 0; });
 
 
 
-// Build the top tab bar, and show/hide the matching <section>.
-// This is the function that makes "Homes / Experiences / Services"
-// behave like separate pages without actually navigating anywhere.
+
+// the function that makes "Homes / Experiences / Services"
+
 function renderTabs(){
   const nav = document.getElementById("top-tabs");
   nav.innerHTML = TABS.map(tab => `
@@ -503,9 +501,7 @@ function renderTabs(){
   showActiveSection();
 }
 
-// Loops through every tab's section and hides all but the active one.
-// The category filter bar only makes sense for Homes, so it's toggled
-// here too instead of duplicating this logic elsewhere.
+// activesection
 function showActiveSection(){
   TABS.forEach(tab => {
     document.getElementById(tab.sectionId).style.display =
@@ -516,7 +512,7 @@ function showActiveSection(){
     state.activeTab === "homes" ? "flex" : "none";
 }
 
-// Build the category pills once, and re-highlight the active one.
+// Build the category pills 
 function renderCategories(){
   const nav = document.getElementById("categories");
   nav.innerHTML = CATEGORIES.map(cat => `
@@ -618,9 +614,7 @@ function renderListings(){
 }
 
 /*  EXPERIENCES & SERVICES
-   These reuse the same .card / .card-media / .card-info CSS classes
-   as listings, so we get consistent styling for free. Their cards are
-   simpler  */
+    */
 function experienceCardHTML(item){
   return `
     <div class="card">
@@ -672,8 +666,7 @@ function renderServices(){
 }
 
 /*
-   we use "event delegation": one click listener on the whole
-   grid, then check what was actually clicked.
+    "event delegation": 
  */
 function attachCardEvents(){
   const grid = document.getElementById("listing-grid");
@@ -690,8 +683,8 @@ function attachCardEvents(){
     const action = actionBtn.dataset.action;
 
     if (action === "heart"){
-      item.favorite = !item.favorite;          // flip liked state
-      renderListings();                        // re-draw to reflect it
+      item.favorite = !item.favorite;         
+      renderListings();                       
     }
 
     if (action === "next"){
@@ -709,7 +702,7 @@ function attachCardEvents(){
 }
 
 /* SEARCH 
-   We listen on every keystroke ("input" event) and re-filter live.
+   
 */
 const searchInput = document.getElementById("search-where");
 searchInput.addEventListener("input", (e) => {
@@ -717,9 +710,7 @@ searchInput.addEventListener("input", (e) => {
   renderListings();
 });
 
-// clicking the pink search button re-runs the same filter
-// (handy for touch devices where "input" already fires, but this
-// makes the button feel functional too)
+
 document.getElementById("search-btn").addEventListener("click", () => {
   state.searchTerm = searchInput.value.trim();
   renderListings();
