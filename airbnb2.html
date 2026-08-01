@@ -311,11 +311,7 @@
     </div>
   </div>
 
-<<<<<<< HEAD
   <!-- TOP TABS: switch which section is visible via JS -->
-=======
-  <!-- TOP TABS: -->
->>>>>>> experiences-services-pages
   <div class="wrap">
     <nav class="top-tabs" id="top-tabs">
       <!-- filled in by JS from the TABS array, see script below -->
@@ -339,13 +335,6 @@
     </div>
   </section>
 
-  <!-- EXPERIENCES  -->
-  <section id="section-experiences" style="display:none">
-    <p id="experiences-count"></p>
-    <div class="grid" id="experiences-grid">
-      <!-- experience cards built by JS, see renderExperiences() -->
-    </div>
-  </section>
 
   <!-- SERVICES  -->
   <section id="section-services" style="display:none">
@@ -431,26 +420,13 @@ const CATEGORIES = [
 ];
 
 // The three top-level tabs. 
+// The three top-level tabs.
+// "homes" and "services" stay on this page and toggle a section.
+// "experiences" navigates away to its own standalone page file.
 const TABS = [
   { key:"homes", label:"Homes",  sectionId:"section-homes" },
-  { key:"experiences", label:"Experiences", sectionId:"section-experiences" },
+  { key:"experiences", label:"Experiences", href:"airbnb-experiences-clone.html" },
   { key:"services", label:"Services",  sectionId:"section-services" }
-];
-
-// Experiences: activities hosted by a local
-const EXPERIENCES = [
-  { id:101, title:"Pasta-making with a Roman nonna", host:"Hosted by Giulia", location:"Rome, Italy",
-    price:89, rating:4.98, duration:"3 hours",
-    photo:"https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=600" },
-  { id:102, title:"Sunrise surf lesson", host:"Hosted by Kai", location:"Oahu, Hawaii",
-    price:65, rating:4.94, duration:"2 hours",
-    photo:"https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=600" },
-  { id:103, title:"Street photography walk", host:"Hosted by Mateo", location:"Mexico City, Mexico",
-    price:40, rating:4.9, duration:"2.5 hours",
-    photo:"https://images.unsplash.com/photo-1500534623283-312aade485b7?w=600" },
-  { id:104, title:"Tokyo late-night ramen crawl", host:"Hosted by Aiko", location:"Tokyo, Japan",
-    price:75, rating:4.97, duration:"3 hours",
-    photo:"https://images.unsplash.com/photo-1557872943-16a5ac26437e?w=600" }
 ];
 
 // Services: on-demand help booked at a stay, e.g. a private chef.
@@ -485,19 +461,28 @@ const state = {
 LISTINGS.forEach(item => { state.photoIndex[item.id] = 0; });
 
 
-
-// Build the top tab bar, and show/hide the matching <section>.
-// This is the function that makes "Homes / Experiences / Services"
-// behave like separate pages without actually navigating anywhere.
 function renderTabs(){
   const nav = document.getElementById("top-tabs");
-  nav.innerHTML = TABS.map(tab => `
-    <button class="tab-btn ${tab.key === state.activeTab ? "active" : ""}" data-key="${tab.key}">
-      <span>${tab.label}</span>
-    </button>
-  `).join("");
+  nav.innerHTML = TABS.map(tab => {
+    // tabs with an href are real links to a separate page (Experiences)
+    if (tab.href){
+      return `
+        <a class="tab-btn" href="${tab.href}" data-key="${tab.key}">
+          <span>${tab.label}</span>
+        </a>
+      `;
+    }
+    // tabs without an href stay on this page and just toggle a section
+    return `
+      <button class="tab-btn ${tab.key === state.activeTab ? "active" : ""}" data-key="${tab.key}">
+        <span>${tab.label}</span>
+      </button>
+    `;
+  }).join("");
 
-  nav.querySelectorAll(".tab-btn").forEach(btn => {
+  // only the in-page (button) tabs need a click listener —
+  // the href tabs just navigate normally
+  nav.querySelectorAll("button.tab-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       state.activeTab = btn.dataset.key; // update state
       renderTabs();                      // re-draw tabs (highlight)
@@ -509,10 +494,10 @@ function renderTabs(){
 }
 
 // Loops through every tab's section and hides all but the active one.
-// The category filter bar only makes sense for Homes, so it's toggled
-// here too instead of duplicating this logic elsewhere.
+// Tabs that navigate to a separate page (no sectionId) are skipped.
 function showActiveSection(){
   TABS.forEach(tab => {
+    if (!tab.sectionId) return;
     document.getElementById(tab.sectionId).style.display =
       tab.key === state.activeTab ? "block" : "none";
   });
@@ -626,30 +611,6 @@ function renderListings(){
    These reuse the same .card / .card-media / .card-info CSS classes
    as listings, so we get consistent styling for free. Their cards are
    simpler  */
-function experienceCardHTML(item){
-  return `
-    <div class="card">
-      <div class="card-media">
-        <img class="show" src="${item.photo}" alt="${item.title}">
-      </div>
-      <div class="card-info">
-        <div class="card-row">
-          <span class="card-title">${item.location}</span>
-          <span class="card-rating">★ ${item.rating.toFixed(2)}</span>
-        </div>
-        <div class="card-sub">${item.title}</div>
-        <div class="card-sub">${item.host} · ${item.duration}</div>
-        <div class="card-price"><b>$${item.price}</b> per person</div>
-      </div>
-    </div>
-  `;
-}
-
-function renderExperiences(){
-  const grid = document.getElementById("experiences-grid");
-  document.getElementById("experiences-count").textContent = `${EXPERIENCES.length} experiences`;
-  grid.innerHTML = EXPERIENCES.map(experienceCardHTML).join("");
-}
 
 function serviceCardHTML(item){
   return `
@@ -734,7 +695,6 @@ document.getElementById("search-btn").addEventListener("click", () => {
 renderTabs();
 renderCategories();
 renderListings();
-renderExperiences();
 renderServices();
 </script>
 
