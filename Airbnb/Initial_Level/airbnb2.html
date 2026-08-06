@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>airbnb</title>
+<style>
+ 
+  :root{
+    --pink: #FF385C;
+    --pink-dark: #E31C5F;
+    --text: #222222;
+    --text-light: #717171;
+    --border: #DDDDDD;
+    --radius: 12px;
+    --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  *{ box-sizing: border-box; margin:0; padding:0; }
+
+  body{
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: var(--text);
+    background:#fff;
+  }
+
+  a{ text-decoration:none; color:inherit; }
+  button{ font-family:inherit; cursor:pointer; border:none; background:none; }
+  img{ max-width:100%; display:block; }
+
+  .wrap{ max-width:1760px; margin:0 auto; padding:0 40px; }
+
+  /*
+     2. HEADER */
+  header{
+    border-bottom:1px solid var(--border);
+    padding:14px 0;
+    position: sticky;
+    top:0;
+    background:#fff;
+    z-index: 100;
+  }
+  .header-inner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    flex-wrap: nowrap;
+  }
+  .logo{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:22px;
+    font-weight:800;
+    color: var(--pink);
+  }
+  .logo svg{ width:28px; height:28px; }
+
+  /* search */
+  .searchbar{
+    display:flex;
+    align-items:center;
+    border:1px solid var(--border);
+    border-radius:999px;
+    box-shadow: var(--shadow);
+    overflow:hidden;
+  }
+  .searchbar input{
+    border:none;
+    outline:none;
+    padding:12px 18px;
+    font-size:14px;
+    width:150px;
+  }
+  .searchbar .divider{ width:1px; height:24px; background:var(--border); }
+  .search-btn{
+    background: var(--pink);
+    color:#fff;
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:6px;
+    flex-shrink:0;
+  }
+
+  .header-right{ display:flex; align-items:center; gap:14px; }
+  .icon-btn{
+    padding:10px 14px;
+    border-radius:999px;
+    font-size:14px;
+    font-weight:600;
+  }
+  .icon-btn:hover{ background:#f5f5f5; }
+  .user-menu{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    border:1px solid var(--border);
+    border-radius:999px;
+    padding:6px 6px 6px 14px;
+    box-shadow: var(--shadow);
+  }
+  .avatar{
+    width:30px; height:30px; border-radius:50%;
+    background:#717171; color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:15px;
+  }
+
+  /*
+     . (Homes / Experiences / Services) */
+  .top-tabs{
+    display:flex;
+    justify-content:center;
+    gap:40px;
+    padding-top:6px;
+  }
+  .tab-btn{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:15px;
+    font-weight:600;
+    color: var(--text-light);
+    padding:8px 4px;
+    border-bottom:2px solid transparent;
+  }
+  .tab-btn .tab-emoji{ font-size:18px; }
+  .tab-btn:hover{ color:var(--text); }
+  .tab-btn.active{
+    color: var(--text);
+    border-bottom-color: var(--text);
+  }
+
+  /*  Category */
+  .categories{
+    display:flex;
+    gap:32px;
+    padding:20px 0;
+    overflow-x:auto;
+    border-bottom:1px solid var(--border);
+  }
+  .category{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    font-size:12px;
+    color: var(--text-light);
+    opacity:0.75;
+    white-space:nowrap;
+    padding-bottom:8px;
+    border-bottom:2px solid transparent;
+    flex-shrink:0;
+  }
+  .category:hover{ opacity:1; color:var(--text); }
+  .category.active{
+    opacity:1;
+    color:var(--text);
+    border-bottom-color: var(--text);
+    font-weight:600;
+  }
+  .category .emoji{ font-size:22px; }
+
+  /* LISTINGS */
+  main{ padding:32px 0 80px; }
+  #results-count{
+    color: var(--text-light);
+    font-size:14px;
+    margin-bottom:16px;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px,1fr));
+    gap:28px 24px;
+  }
+
+  .card{ cursor:pointer; }
+  .card-media{
+    position:relative;
+    border-radius: var(--radius);
+    overflow:hidden;
+    aspect-ratio: 1/1;
+    background:#eee;
+  }
+  .card-media img{
+    width:100%; height:100%; object-fit:cover;
+    display:none; /* JS toggles which photo shows */
+  }
+  .card-media img.show{ display:block; }
+
+  /* carousel arrows  */
+  .carousel-btn{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:28px; height:28px;
+    background:rgba(255,255,255,0.9);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 1px 4px rgba(0,0,0,0.3);
+    opacity:0;
+    transition:opacity .15s;
+    font-size:14px;
+  }
+  .card-media:hover .carousel-btn{ opacity:1; }
+  .carousel-btn.prev{ left:8px; }
+  .carousel-btn.next{ right:8px; }
+
+  .carousel-dots{
+    position:absolute;
+    bottom:10px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    gap:4px;
+  }
+  .carousel-dots span{
+    width:5px; height:5px; border-radius:50%;
+    background:rgba(255,255,255,0.7);
+  }
+  .carousel-dots span.active{ background:#fff; width:6px; height:6px; }
+
+  .heart-btn{
+    position:absolute;
+    top:10px; right:10px;
+    width:24px; height:24px;
+    z-index:2;
+  }
+  .heart-btn svg{ width:100%; height:100%; }
+  .heart-btn .fill{ fill: transparent; transition: fill .15s; }
+  .heart-btn.liked .fill{ fill: var(--pink); }
+  .heart-btn .stroke{ stroke:#fff; stroke-width:2px; fill:rgba(0,0,0,0.35); }
+  .heart-btn.liked .stroke{ stroke: var(--pink); }
+
+  .guest-favorite{
+    position:absolute;
+    top:10px; left:10px;
+    background:#fff;
+    font-size:11px;
+    font-weight:600;
+    padding:5px 9px;
+    border-radius:6px;
+  }
+
+  .card-info{ padding-top:10px; }
+  .card-row{
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+    font-size:14.5px;
+  }
+  .card-title{ font-weight:600; }
+  .card-rating{ display:flex; align-items:center; gap:4px; }
+  .card-sub{ color: var(--text-light); font-size:14.5px; margin-top:2px; }
+  .card-price{ margin-top:4px; font-size:14.5px; }
+  .card-price b{ font-weight:600; }
+
+  .empty-state{
+    text-align:center;
+    padding:80px 20px;
+    color: var(--text-light);
+  }
+
+  footer{
+    border-top:1px solid var(--border);
+    padding:24px 0;
+    text-align:center;
+    color: var(--text-light);
+    font-size:13px;
+  }
+
+  @media (max-width:700px){
+    .searchbar input{ width:70px; }
+    .wrap{ padding:0 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap header-inner">
+    <div class="logo">
+      airbnb
+    </div>
+
+    <!-- SEARCH BAR -->
+    <div class="searchbar">
+      <input id="search-where" type="text" placeholder="Search destinations">
+      <div class="divider"></div>
+      <input type="text" placeholder="Check in" onfocus="this.type='date'" style="width:100px">
+      <div class="divider"></div>
+      <input type="text" placeholder="Add guests" style="width:100px">
+      <button class="search-btn" id="search-btn" aria-label="Search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+          <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="header-right">
+      <a href="#" class="icon-btn">Become a host</a>
+      <div class="user-menu">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <div class="avatar">👤</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOP TABS: switch which section is visible via JS -->
+  <div class="wrap">
+    <nav class="top-tabs" id="top-tabs">
+      <!-- filled in by JS from the TABS array, see script below -->
+    </nav>
+  </div>
+
+  <!-- CATEGORY BAR: only shown on the Homes tab, filters listings below -->
+  <div class="wrap">
+    <nav class="categories" id="categories">
+      <!-- filled in by JS from the CATEGORIES array, see script below -->
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!--HOME -->
+  <section id="section-homes">
+    <p id="results-count"></p>
+    <div class="grid" id="listing-grid">
+      <!-- listing cards are built entirely by JS, see renderListings() -->
+    </div>
+  </section>
+
+
+  <!-- SERVICES  -->
+  <section id="section-services" style="display:none">
+    <p id="services-count"></p>
+    <div class="grid" id="services-grid">
+      <!-- service cards built by JS, see renderServices() -->
+    </div>
+  </section>
+</main>
+
+<footer>
+ 
+</footer>
+
+<script>
+/* 
+   an array of listing
+   objects (LISTINGS), and write small functions that turn that data
+   into HTML on the page.*/
+
+/*- */
+// Each listing is a plain JS object. "photos" is an array so we can
+// build a mini image-carousel per card.
+const LISTINGS = [
+  { id:1, title:"Oceanfront villa", location:"Malibu, California", category:"beach",
+    price:420, rating:4.97, favorite:true,
+    photos:[
+      "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=600",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600",
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600"
+    ]},
+  { id:2, title:"Cozy mountain cabin", location:"Aspen, Colorado", category:"cabins",
+    price:210, rating:4.88, favorite:false,
+    photos:[
+      "https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?w=600",
+      "https://images.unsplash.com/photo-1518602164578-cd0074062767?w=600"
+    ]},
+  { id:3, title:"Modern city loft", location:"New York, New York", category:"trending",
+    price:180, rating:4.75, favorite:false,
+    photos:[
+      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600",
+      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600"
+    ]},
+  { id:4, title:"Countryside farmhouse", location:"Provence, France", category:"countryside",
+    price:265, rating:4.92, favorite:true,
+    photos:[
+      "https://images.unsplash.com/photo-1505692952047-1a78307da8f2?w=600",
+      "https://images.unsplash.com/photo-1500076656116-558758c991c1?w=600"
+    ]},
+  { id:5, title:"Desert dome retreat", location:"Joshua Tree, California", category:"trending",
+    price:150, rating:4.99, favorite:false,
+    photos:[
+      "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=600",
+      "https://images.unsplash.com/photo-1601918774946-25832a4be0d6?w=600"
+    ]},
+  { id:6, title:"Lakeside cottage", location:"Lake Tahoe, California", category:"cabins",
+    price:195, rating:4.85, favorite:false,
+    photos:[
+      "https://images.unsplash.com/photo-1475087542963-13ab5e611954?w=600",
+      "https://images.unsplash.com/photo-1470770903676-69b98201ea1c?w=600"
+    ]},
+  { id:7, title:"Private island bungalow", location:"Bora Bora, French Polynesia", category:"beach",
+    price:610, rating:5.0, favorite:true,
+    photos:[
+      "https://images.unsplash.com/photo-1573843981267-be1999ff37cd?w=600",
+      "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=600"
+    ]},
+  { id:8, title:"Rustic vineyard house", location:"Tuscany, Italy", category:"countryside",
+    price:240, rating:4.9, favorite:false,
+    photos:[
+      "https://images.unsplash.com/photo-1523217582562-09d0def993a6?w=600",
+      "https://images.unsplash.com/photo-1533619239233-6a0d7e2d6a6a?w=600"
+    ]}
+];
+
+
+const CATEGORIES = [
+  { key:"all", label:"All" },
+  { key:"beach", label:"Beachfront"},
+  { key:"cabins", label:"Cabins", },
+  { key:"trending", label:"Trending", },
+  { key:"countryside", label:"Countryside", }
+];
+
+// The three top-level tabs. 
+// The three top-level tabs.
+// "homes" and "services" stay on this page and toggle a section.
+// "experiences" navigates away to its own standalone page file.
+const TABS = [
+  { key:"homes", label:"Homes",  sectionId:"section-homes" },
+  { key:"experiences", label:"Experiences", href:"airbnb-experiences-clone.html" },
+  { key:"services", label:"Services",  sectionId:"section-services" }
+];
+
+// Services: on-demand help booked at a stay, e.g. a private chef.
+const SERVICES = [
+  { id:201, title:"Private in-home chef", provider:"Provided by Marcus", location:"Available in most cities",
+    price:120, rating:4.96, unit:"per event",
+    photo:"https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600" },
+  { id:202, title:"Deep-clean turnover service", provider:"Provided by Sparkle Co.", location:"Available in most cities",
+    price:70, rating:4.85, unit:"per visit",
+    photo:"https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600" },
+  { id:203, title:"Massage therapy at your stay", provider:"Provided by Elena", location:"Available in select cities",
+    price:95, rating:4.99, unit:"per session",
+    photo:"https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600" },
+  { id:204, title:"Personal trainer session", provider:"Provided by Devon", location:"Available in select cities",
+    price:60, rating:4.88, unit:"per session",
+    photo:"https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600" }
+];
+
+/* 
+   "State" = the few values that can change and should re-draw the
+   page whenever they do. Keeping them in one object makes it obvious
+   what the app is tracking.
+- */
+const state = {
+  activeTab: "homes",      // which top-level tab is selected
+  activeCategory: "all",   // which category pill is selected
+  searchTerm: "",          // what the user typed in the search box
+  photoIndex: {}           // { listingId: currentPhotoIndexShown }
+};
+
+// give every listing a starting photo index of 0 (first photo)
+LISTINGS.forEach(item => { state.photoIndex[item.id] = 0; });
+
+
+function renderTabs(){
+  const nav = document.getElementById("top-tabs");
+  nav.innerHTML = TABS.map(tab => {
+    // tabs with an href are real links to a separate page (Experiences)
+    if (tab.href){
+      return `
+        <a class="tab-btn" href="${tab.href}" data-key="${tab.key}">
+          <span>${tab.label}</span>
+        </a>
+      `;
+    }
+    // tabs without an href stay on this page and just toggle a section
+    return `
+      <button class="tab-btn ${tab.key === state.activeTab ? "active" : ""}" data-key="${tab.key}">
+        <span>${tab.label}</span>
+      </button>
+    `;
+  }).join("");
+
+  // only the in-page (button) tabs need a click listener —
+  // the href tabs just navigate normally
+  nav.querySelectorAll("button.tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      state.activeTab = btn.dataset.key; // update state
+      renderTabs();                      // re-draw tabs (highlight)
+      showActiveSection();               // swap which grid is visible
+    });
+  });
+
+  showActiveSection();
+}
+
+// Loops through every tab's section and hides all but the active one.
+// Tabs that navigate to a separate page (no sectionId) are skipped.
+function showActiveSection(){
+  TABS.forEach(tab => {
+    if (!tab.sectionId) return;
+    document.getElementById(tab.sectionId).style.display =
+      tab.key === state.activeTab ? "block" : "none";
+  });
+
+  document.getElementById("categories").style.display =
+    state.activeTab === "homes" ? "flex" : "none";
+}
+
+// Build the category pills once, and re-highlight the active one.
+function renderCategories(){
+  const nav = document.getElementById("categories");
+  nav.innerHTML = CATEGORIES.map(cat => `
+    <button class="category ${cat.key === state.activeCategory ? "active" : ""}"
+            data-key="${cat.key}">
+      <span>${cat.label}</span>
+    </button>
+  `).join("");
+
+  // attach one click listener per pill
+  nav.querySelectorAll(".category").forEach(btn => {
+    btn.addEventListener("click", () => {
+      state.activeCategory = btn.dataset.key; // update state
+      renderCategories();                     // re-draw pills (highlight)
+      renderListings();                       // re-draw the grid
+    });
+  });
+}
+
+// Work out which listings should currently be visible,
+// based on state.activeCategory + state.searchTerm.
+function getFilteredListings(){
+  return LISTINGS.filter(item => {
+    const matchesCategory =
+      state.activeCategory === "all" || item.category === state.activeCategory;
+
+    const matchesSearch =
+      state.searchTerm === "" ||
+      item.location.toLowerCase().includes(state.searchTerm.toLowerCase());
+
+    return matchesCategory && matchesSearch;
+  });
+}
+
+// Build one card's HTML. Kept as its own function so renderListings()
+// stays easy to read.
+function listingCardHTML(item){
+  const activeIndex = state.photoIndex[item.id];
+
+  const photosHTML = item.photos.map((src, i) => `
+    <img src="${src}" class="${i === activeIndex ? "show" : ""}" alt="${item.title}">
+  `).join("");
+
+  const dotsHTML = item.photos.map((_, i) => `
+    <span class="${i === activeIndex ? "active" : ""}"></span>
+  `).join("");
+
+  return `
+    <div class="card" data-id="${item.id}">
+      <div class="card-media">
+        ${item.favorite ? `<span class="guest-favorite">Guest favorite</span>` : ""}
+
+        <!-- heart / wishlist button -->
+        <button class="heart-btn ${item.favorite ? "liked" : ""}" data-action="heart" aria-label="Save">
+          <svg viewBox="0 0 32 32">
+            <path class="fill stroke" d="M16 28c-6-4.5-13-9.9-13-17A7.5 7.5 0 0 1 16 7a7.5 7.5 0 0 1 13 4c0 7.1-7 12.5-13 17z"/>
+          </svg>
+        </button>
+
+        <!-- carousel prev / next -->
+        <button class="carousel-btn prev" data-action="prev">‹</button>
+        <button class="carousel-btn next" data-action="next">›</button>
+
+        ${photosHTML}
+
+        <div class="carousel-dots">${dotsHTML}</div>
+      </div>
+
+      <div class="card-info">
+        <div class="card-row">
+          <span class="card-title">${item.location}</span>
+          <span class="card-rating">★ ${item.rating.toFixed(2)}</span>
+        </div>
+        <div class="card-sub">${item.title}</div>
+        <div class="card-price"><b>$${item.price}</b> night</div>
+      </div>
+    </div>
+  `;
+}
+
+// Draws the whole grid based on current state, and hooks up
+// interactions (heart click, carousel arrows) for every card.
+function renderListings(){
+  const grid = document.getElementById("listing-grid");
+  const countLabel = document.getElementById("results-count");
+  const visible = getFilteredListings();
+
+  countLabel.textContent = state.searchTerm
+    ? `${visible.length} stays in "${state.searchTerm}"`
+    : `${visible.length} stays`;
+
+  if (visible.length === 0){
+    grid.innerHTML = `<div class="empty-state">No stays match your search. Try a different destination.</div>`;
+    return;
+  }
+
+  grid.innerHTML = visible.map(listingCardHTML).join("");
+  attachCardEvents();
+}
+
+/*  EXPERIENCES & SERVICES
+   These reuse the same .card / .card-media / .card-info CSS classes
+   as listings, so we get consistent styling for free. Their cards are
+   simpler  */
+
+function serviceCardHTML(item){
+  return `
+    <div class="card">
+      <div class="card-media">
+        <img class="show" src="${item.photo}" alt="${item.title}">
+      </div>
+      <div class="card-info">
+        <div class="card-row">
+          <span class="card-title">${item.title}</span>
+          <span class="card-rating">★ ${item.rating.toFixed(2)}</span>
+        </div>
+        <div class="card-sub">${item.provider}</div>
+        <div class="card-sub">${item.location}</div>
+        <div class="card-price"><b>$${item.price}</b> ${item.unit}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderServices(){
+  const grid = document.getElementById("services-grid");
+  document.getElementById("services-count").textContent = `${SERVICES.length} services`;
+  grid.innerHTML = SERVICES.map(serviceCardHTML).join("");
+}
+
+/*
+   we use "event delegation": one click listener on the whole
+   grid, then check what was actually clicked.
+ */
+function attachCardEvents(){
+  const grid = document.getElementById("listing-grid");
+
+  grid.onclick = (e) => {
+    const card = e.target.closest(".card");
+    if (!card) return;
+    const id = Number(card.dataset.id);
+    const item = LISTINGS.find(l => l.id === id);
+
+    const actionBtn = e.target.closest("[data-action]");
+    if (!actionBtn) return; // clicked somewhere else on the card, ignore
+
+    const action = actionBtn.dataset.action;
+
+    if (action === "heart"){
+      item.favorite = !item.favorite;          // flip liked state
+      renderListings();                        // re-draw to reflect it
+    }
+
+    if (action === "next"){
+      const total = item.photos.length;
+      state.photoIndex[id] = (state.photoIndex[id] + 1) % total; // wrap around
+      renderListings();
+    }
+
+    if (action === "prev"){
+      const total = item.photos.length;
+      state.photoIndex[id] = (state.photoIndex[id] - 1 + total) % total; // wrap around
+      renderListings();
+    }
+  };
+}
+
+/* SEARCH 
+   We listen on every keystroke ("input" event) and re-filter live.
+*/
+const searchInput = document.getElementById("search-where");
+searchInput.addEventListener("input", (e) => {
+  state.searchTerm = e.target.value.trim();
+  renderListings();
+});
+
+// clicking the pink search button re-runs the same filter
+// (handy for touch devices where "input" already fires, but this
+// makes the button feel functional too)
+document.getElementById("search-btn").addEventListener("click", () => {
+  state.searchTerm = searchInput.value.trim();
+  renderListings();
+});
+
+
+renderTabs();
+renderCategories();
+renderListings();
+renderServices();
+</script>
+
+</body>
+</html>
