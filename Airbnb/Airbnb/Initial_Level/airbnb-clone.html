@@ -378,7 +378,7 @@ const LISTINGS = [
       "https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?w=600",
       "https://images.unsplash.com/photo-1518602164578-cd0074062767?w=600"
     ]},
-  { id:3, title:"Modern city loft", location:"New York, New York", category:"trending",
+  { id:3, title:"A Stylish 2BHK apartment near Manyata &amp; Hebbal", location:"Apartment in Hebbal", category:"trending",
     price:180, rating:4.75, favorite:false,
     photos:[
       "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600",
@@ -681,33 +681,39 @@ function attachCardEvents(){
   grid.onclick = (e) => {
     const card = e.target.closest(".card");
     if (!card) return;
+
     const id = Number(card.dataset.id);
     const item = LISTINGS.find(l => l.id === id);
 
+    // Open the 2BHK listing details page when the card itself is clicked
+    if (id === 3 && !e.target.closest("[data-action]")) {
+      window.location.href = "airbnb-listing-clone.html";
+      return;
+    }
+
     const actionBtn = e.target.closest("[data-action]");
-    if (!actionBtn) return; // clicked somewhere else on the card, ignore
+    if (!actionBtn) return;
 
     const action = actionBtn.dataset.action;
 
     if (action === "heart"){
-      item.favorite = !item.favorite;          // flip liked state
-      renderListings();                        // re-draw to reflect it
+      item.favorite = !item.favorite;
+      renderListings();
     }
 
     if (action === "next"){
       const total = item.photos.length;
-      state.photoIndex[id] = (state.photoIndex[id] + 1) % total; // wrap around
+      state.photoIndex[id] = (state.photoIndex[id] + 1) % total;
       renderListings();
     }
 
     if (action === "prev"){
       const total = item.photos.length;
-      state.photoIndex[id] = (state.photoIndex[id] - 1 + total) % total; // wrap around
+      state.photoIndex[id] = (state.photoIndex[id] - 1 + total) % total;
       renderListings();
     }
   };
 }
-
 /* SEARCH 
    We listen on every keystroke ("input" event) and re-filter live.
 */
