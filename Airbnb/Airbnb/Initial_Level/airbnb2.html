@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>airbnb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
  
   :root{
@@ -19,7 +23,7 @@
   *{ box-sizing: border-box; margin:0; padding:0; }
 
   body{
-    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'Figtree', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
     color: var(--text);
     background:#fff;
   }
@@ -31,110 +35,367 @@
   .wrap{ max-width:1760px; margin:0 auto; padding:0 40px; }
 
   /*
-     2. HEADER */
-  header{
-    border-bottom:1px solid var(--border);
-    padding:14px 0;
-    position: sticky;
-    top:0;
-    background:#fff;
-    z-index: 100;
-  }
-  .header-inner{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:20px;
-    flex-wrap: nowrap;
-  }
-  .logo{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    font-size:22px;
-    font-weight:800;
-    color: var(--pink);
-  }
-  .logo svg{ width:28px; height:28px; }
+     2. HEADER...new code here */
+.site-header.scrolled .top-bar {
+  padding: 10px 40px;
+}
+
+/* Hide navigation tabs on scroll */
+.site-header.scrolled .nav-tabs {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -15px) scale(0.9);
+}
+
+/* Transition search container to center pill position */
+.site-header.scrolled .search-container {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0;
+  width: auto;
+}
+
+/* Compact pill design */
+.site-header.scrolled .search-bar {
+  height: 48px;
+  width: 380px;
+  padding: 0 8px 0 16px;
+  border-radius: 30px;
+  background: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  border: 1px solid #dddddd;
+}
+
+.site-header.scrolled .search-bar:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Add an icon before the first field when scrolled */
+.site-header.scrolled .search-bar::before {
+  content: "\f14e"; /* Font Awesome Compass/Explore icon */
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  color: #ff385c;
+  font-size: 18px;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+}
+
+/* Hide field labels (Where, When, Type) and adjust input text */
+.site-header.scrolled .search-field {
+  padding: 0 8px;
+  justify-content: center;
+}
+
+.site-header.scrolled .search-field label {
+  display: none;
+}
+
+.site-header.scrolled .search-field input {
+  font-size: 13px;
+  font-weight: 600;
+  color: #222222;
+  text-overflow: ellipsis;
+}
+
+/* Small, crisp round search button */
+.site-header.scrolled .search-btn {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  padding: 0;
+  font-size: 12px;
+  border-radius: 50%;
+}
+    .site-header {
+      position: sticky;
+      top: 0;
+      background: #fafafa;
+      backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+      z-index: 1000;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .top-bar {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 40px 15px 40px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #ff385c;
+      font-size: 24px;
+      font-weight: 800;
+      text-decoration: none;
+            transform: scaleX(1.1); 
+
+      letter-spacing: -1px;
+font-family: "Airbnb Cereal", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;    }
+
+    .logo i{
+        font-size: 32px;
+              transform: scaleY(1.1); 
+
+        /* Adds a subtle stroke outline in the same color to physically thicken the icon stroke */
+  -webkit-text-stroke: .32px #ff385c;
+  
+  /* Optional: Adds a slight glow to give it a richer, bolder presence */
+  filter: drop-shadow(0px 0px 0.3px #ff385c);
+    
+    }
+
+    
+  .logo span {
+  font-family: 'Figtree', sans-serif;
+  font-feature-settings: "ss01" 1;
+  font-weight: 550;
+
+}
+.nav-tabs {
+      position: absolute;
+      left:50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 36px;
+      align-items: center;
+    }
+
+    .tab-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-bottom: 8px;
+      text-decoration: none;
+      color: #717171;
+      font-size: 15px;
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+    .tab-icon {
+    font-size: 32px;
+    transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.tab-item:hover {
+    color: #000000;
+    border-bottom-color: transparent;
+}
+
+.tab-item:hover .tab-icon {
+    transform: scale(1.3);
+}
+
+    .tab-item.active {
+    color: #000000;
+    border-bottom-color: #000000;
+    font-weight: 600;
+}
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+    }
+
+    .host-btn {
+      text-decoration: none;
+      color: #222222;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 14px;
+      border-radius: 22px;
+    }
+    .icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 10px;
+      border-radius: 50%;
+    }
+    .user-menu-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid #dddddd;
+      padding: 5px 5px 5px 12px;
+      border-radius: 21px;
+      background: transparent;
+      cursor: pointer;
+      transition: box-shadow 0.2s ease;
+    }
+  /* USER DROPDOWN MENU */
+    .user-dropdown {
+      display: none;
+      position: absolute;
+      top: 50px;
+      right: 0;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      width: 240px;
+      padding: 8px 0;
+      z-index: 1001;
+      border: 1px solid #EBEBEB;
+    }
+
+    .user-dropdown.show {
+      display: block;
+    }
+
+    .user-dropdown a {
+      display: block;
+      padding: 12px 16px;
+      color: #222222;
+      font-size: 14px;
+      text-decoration: none;
+      transition: background 0.2s ease;
+    }
+
+    .user-dropdown a:hover {
+      background-color: #f7f7f7;
+    }
+
+    .user-dropdown .divider {
+      height: 1px;
+      background-color: #ebebeb;
+      margin: 8px 0;
+    }
+
+
 
   /* search */
-  .searchbar{
+  
+  .search-container{
+    display:flex;
+    justify-content:center;
+    padding:0 0 20px;
+}
+
+.search-bar{
     display:flex;
     align-items:center;
-    border:1px solid var(--border);
-    border-radius:999px;
-    box-shadow: var(--shadow);
-    overflow:hidden;
-  }
-  .searchbar input{
+    width:100%;
+    max-width:850px;
+    height:66px;
+    background:#fff;
+    border:1px solid #ddd;
+    border-radius:34px;
+    box-shadow:0 3px 12px rgba(0,0,0,.08);
+    position:relative;
+}
+.search-field{
+    flex:1;
+    padding:0 24px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    cursor:pointer;
+}
+.search-field + .search-field{
+    border-left:1px solid #ddd;
+}
+.search-field:hover{
+    background:#f7f7f7;
+}
+
+.search-field.active{
+    background:#f7f7f7;
+}
+
+.search-field:first-child{
+    border-radius:34px 0 0 34px;
+}
+
+.search-field label{
+    font-size:12px;
+    font-weight:600;
+    margin-bottom:4px;
+}
+
+.search-field input{
     border:none;
     outline:none;
-    padding:12px 18px;
     font-size:14px;
-    width:150px;
-  }
-  .searchbar .divider{ width:1px; height:24px; background:var(--border); }
-  .search-btn{
-    background: var(--pink);
-    color:#fff;
-    width:40px;
-    height:40px;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    margin:6px;
-    flex-shrink:0;
-  }
-
-  .header-right{ display:flex; align-items:center; gap:14px; }
-  .icon-btn{
-    padding:10px 14px;
-    border-radius:999px;
-    font-size:14px;
-    font-weight:600;
-  }
-  .icon-btn:hover{ background:#f5f5f5; }
-  .user-menu{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    border:1px solid var(--border);
-    border-radius:999px;
-    padding:6px 6px 6px 14px;
-    box-shadow: var(--shadow);
-  }
-  .avatar{
-    width:30px; height:30px; border-radius:50%;
-    background:#717171; color:#fff;
-    display:flex; align-items:center; justify-content:center;
-    font-size:15px;
-  }
-
-  /*
-     . (Homes / Experiences / Services) */
-  .top-tabs{
-    display:flex;
-    justify-content:center;
-    gap:40px;
-    padding-top:6px;
-  }
-  .tab-btn{
+    background:transparent;
+    width:100%;
+}
+.search-btn{
+    background-color:#ff385c;
+    color:white;
+    border:none;
+    padding:0 16px;
+    height:48px;
+    border-radius:24px;
     display:flex;
     align-items:center;
     gap:8px;
-    font-size:15px;
+    cursor:pointer;
+    font-size:14px;
     font-weight:600;
-    color: var(--text-light);
-    padding:8px 4px;
-    border-bottom:2px solid transparent;
-  }
-  .tab-btn .tab-emoji{ font-size:18px; }
-  .tab-btn:hover{ color:var(--text); }
-  .tab-btn.active{
-    color: var(--text);
-    border-bottom-color: var(--text);
-  }
+    transition:background-color 0.2s ease;
+    flex-shrink:0;
+}
+
+.search-btn:hover{
+    background-color:#e00b41;
+}
+  .popup-panel{
+    display:none;
+    position:absolute;
+    top:70px;
+    background:#ffffff;
+    border-radius:32px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.15);
+    padding:24px;
+    z-index:999;
+    border:1px solid #ebebeb;
+}
+
+.popup-panel.show{
+    display:block;
+}
+  #where-popup{
+    left:0;
+    width:400px;
+}
+
+.location-item{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    padding:12px;
+    border-radius:12px;
+    cursor:pointer;
+}
+
+.location-item:hover{
+    background-color:#f7f7f7;
+}
+
+.location-icon{
+    width:40px;
+    height:40px;
+    background:#e0e0e0;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+}
+  
 
   /*  Category */
   .categories{
@@ -175,24 +436,37 @@
   }
   .grid{
     display:grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px,1fr));
-    gap:28px 24px;
-  }
+    grid-template-columns:repeat(6,1fr);
+    gap:16px;
+}
 
-  .card{ cursor:pointer; }
+  .card{
+  cursor:pointer;
+  transition: transform 0.25s ease;
+}
+
+.card:hover{
+  transform: translateY(-6px);
+}
+
   .card-media{
     position:relative;
-    border-radius: var(--radius);
+    aspect-ratio:1/1;
     overflow:hidden;
-    aspect-ratio: 1/1;
-    background:#eee;
-  }
+    border-radius:16px;
+}
   .card-media img{
     width:100%; height:100%; object-fit:cover;
     display:none; /* JS toggles which photo shows */
   }
   .card-media img.show{ display:block; }
+.card-media img{
+  transition: transform 0.35s ease;
+}
 
+.card:hover .card-media img.show{
+  transform: scale(1.05);
+}
   /* carousel arrows  */
   .carousel-btn{
     position:absolute;
@@ -207,7 +481,9 @@
     transition:opacity .15s;
     font-size:14px;
   }
-  .card-media:hover .carousel-btn{ opacity:1; }
+  .card:hover .carousel-btn{
+  opacity:1;
+}
   .carousel-btn.prev{ left:8px; }
   .carousel-btn.next{ right:8px; }
 
@@ -247,7 +523,12 @@
     border-radius:6px;
   }
 
-  .card-info{ padding-top:10px; }
+.card-info{
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+}
   .card-row{
     display:flex;
     justify-content:space-between;
@@ -274,49 +555,140 @@
     font-size:13px;
   }
 
-  @media (max-width:700px){
-    .searchbar input{ width:70px; }
+  
     .wrap{ padding:0 16px; }
-  }
+  
 </style>
 </head>
 <body>
 
-<header>
-  <div class="wrap header-inner">
-    <div class="logo">
-      airbnb
-    </div>
+<header class="site-header">
 
-    <!-- SEARCH BAR -->
-    <div class="searchbar">
-      <input id="search-where" type="text" placeholder="Search destinations">
-      <div class="divider"></div>
-      <input type="text" placeholder="Check in" onfocus="this.type='date'" style="width:100px">
-      <div class="divider"></div>
-      <input type="text" placeholder="Add guests" style="width:100px">
-      <button class="search-btn" id="search-btn" aria-label="Search">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
-          <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-      </button>
-    </div>
+  
+    <div class="top-bar">
+      <a href="#" class="logo">
+        <i class="fa-brands fa-airbnb"></i> <span>airbnb</span>
+        </a>
 
-    <div class="header-right">
-      <a href="#" class="icon-btn">Become a host</a>
-      <div class="user-menu">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        <div class="avatar">👤</div>
+      <!-- Category Navigation Tabs -->
+      <nav class="nav-tabs">
+        <a href="airbnb2.html" class="tab-item">
+          <span class="tab-icon">🏠</span> Homes
+        </a>
+        <a href="airbnb-experiences-clone.html" class="tab-item">
+          <span class="tab-icon">🎈</span> Experiences
+        </a>
+        <a href="airbnb-services-clone.html" class="tab-item active">
+          <span class="tab-icon">🛎️</span> Services
+        </a>
+      </nav>
+
+      <!-- User Profile Controls -->
+      <div class="user-actions">
+        <a href="#" class="host-btn">Become a host</a>
+        <button class="icon-btn"><i class="fa-solid fa-globe"></i></button>
+        <button class="user-menu-btn" id="user-menu-toggle">
+          <i class="fa-solid fa-bars"></i>
+          <div style="width: 28px; height: 28px; background:#717171; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px;">
+            <i class="fa-solid fa-user"></i>
+          </div>
+        </button>
+
+        <!-- User Dropdown Menu -->
+        <div class="user-dropdown" id="user-dropdown">
+          <a href="#"><i class="fa-regular fa-circle-question"></i> Help Centre</a>
+          <a href="#">Become a host</a>
+          <a href="refer-a-host.html">Refer a host</a>
+          <a href="find-a-cohost.html">Find a co-host</a>
+          <div class="divider"></div>
+          <a href="#" onclick="openAuthModal(); return false;">Log in or sign up</a>
+        </div>
       </div>
     </div>
-  </div>
 
+<div class="search-container">
+      <div class="search-bar">
+        <div class="search-field" id="field-where">
+          <label>Where</label>
+          <input type="text" id="input-where" placeholder="Search destinations" autocomplete="off" />
+        </div>
+        <div class="search-field" id="field-when">
+          <label>When</label>
+          <input type="text" id="input-when" placeholder="Add dates" readonly />
+        </div>
+        <div class="search-field" id="field-service">
+          <label>Type of service</label>
+          <input type="text" id="input-service" placeholder="Add service" autocomplete="off" />
+        </div>
+        <button class="search-btn" id="search-trigger">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+
+        <!-- Popups for Search Fields -->
+        <!-- 1. Where Popup -->
+        <div class="popup-panel" id="where-popup">
+          <div class="location-item" onclick="selectLocation('Goa')">
+            <div class="location-icon"><i class="fa-solid fa-location-dot"></i></div>
+            <div><strong>Goa</strong></div>
+          </div>
+          <div class="location-item" onclick="selectLocation('North Goa, Goa')">
+            <div class="location-icon"><i class="fa-solid fa-location-dot"></i></div>
+            <div><strong>North Goa</strong>, Goa</div>
+          </div>
+          <div class="location-item" onclick="selectLocation('South Goa, Goa')">
+            <div class="location-icon"><i class="fa-solid fa-location-dot"></i></div>
+            <div><strong>South Goa</strong>, Goa</div>
+          </div>
+        </div>
+
+        <!-- 2. Date Picker Popup -->
+        <div class="popup-panel" id="when-popup">
+          <div class="date-presets">
+            <button class="preset-btn">Today <span>8 Aug</span></button>
+            <button class="preset-btn">Tomorrow <span>9 Aug</span></button>
+            <button class="preset-btn">This weekend <span>8–9 Aug</span></button>
+          </div>
+          <div class="calendar-container">
+            <div class="calendar-header">
+              <span id="calendar-month">August 2026</span>
+              <div>
+                <button class="slider-btn" onclick="changeMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="slider-btn" onclick="changeMonth(1)"><i class="fa-solid fa-chevron-right"></i></button>
+              </div>
+            </div>
+            <div class="calendar-grid">
+              <span class="calendar-day-head">S</span>
+              <span class="calendar-day-head">M</span>
+              <span class="calendar-day-head">T</span>
+              <span class="calendar-day-head">W</span>
+              <span class="calendar-day-head">T</span>
+              <span class="calendar-day-head">F</span>
+              <span class="calendar-day-head">S</span>
+              <span></span><span></span><span></span><span></span><span></span><span></span><span class="calendar-day">1</span>
+              <span class="calendar-day">2</span><span class="calendar-day">3</span><span class="calendar-day">4</span><span class="calendar-day">5</span><span class="calendar-day">6</span><span class="calendar-day">7</span><span class="calendar-day" style="background:#222; color:#fff;">8</span>
+              <span class="calendar-day">9</span><span class="calendar-day">10</span><span class="calendar-day">11</span><span class="calendar-day">12</span><span class="calendar-day">13</span><span class="calendar-day">14</span><span class="calendar-day">15</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Services Types Popup -->
+        <div class="popup-panel" id="service-popup">
+          <p style="font-size: 13px; color: #717171; margin-bottom: 12px;">Suggested categories:</p>
+          <div class="service-tags">
+            <button class="service-tag" onclick="selectService('Photography')">📷 Photography</button>
+            <button class="service-tag" onclick="selectService('Chefs')">👨‍🍳 Chefs</button>
+            <button class="service-tag" onclick="selectService('Massage')">💆 Massage</button>
+            <button class="service-tag" onclick="selectService('Training')">🏋️ Training</button>
+            <button class="service-tag" onclick="selectService('Make-up')">💄 Make-up</button>
+            <button class="service-tag" onclick="selectService('Hair')">✂️ Hair</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</header>
   <!-- TOP TABS: switch which section is visible via JS -->
-  <div class="wrap">
-    <nav class="top-tabs" id="top-tabs">
-      <!-- filled in by JS from the TABS array, see script below -->
-    </nav>
-  </div>
+  
 
   <!-- CATEGORY BAR: only shown on the Homes tab, filters listings below -->
   <div class="wrap">
@@ -324,7 +696,6 @@
       <!-- filled in by JS from the CATEGORIES array, see script below -->
     </nav>
   </div>
-</header>
 
 <main class="wrap">
   <!--HOME -->
@@ -436,18 +807,7 @@ const state = {
 LISTINGS.forEach(item => { state.photoIndex[item.id] = 0; });
 
 
-function renderTabs(){
-  const nav = document.getElementById("top-tabs");
 
-  // All three tabs navigate to their own page.
-  nav.innerHTML = TABS.map(tab => `
-    <a class="tab-btn ${tab.key === "homes" ? "active" : ""}"
-       href="${tab.href}"
-       data-key="${tab.key}">
-      <span>${tab.label}</span>
-    </a>
-  `).join("");
-}
 
 // Build the category pills once, and re-highlight the active one.
 function renderCategories(){
@@ -596,7 +956,7 @@ function attachCardEvents(){
 /* SEARCH 
    We listen on every keystroke ("input" event) and re-filter live.
 */
-const searchInput = document.getElementById("search-where");
+const searchInput = document.getElementById("input-where");
 searchInput.addEventListener("input", (e) => {
   state.searchTerm = e.target.value.trim();
   renderListings();
@@ -605,13 +965,26 @@ searchInput.addEventListener("input", (e) => {
 // clicking the pink search button re-runs the same filter
 // (handy for touch devices where "input" already fires, but this
 // makes the button feel functional too)
-document.getElementById("search-btn").addEventListener("click", () => {
+document.getElementById("search-trigger").addEventListener("click", () => {
   state.searchTerm = searchInput.value.trim();
   renderListings();
 });
+const searchFields = document.querySelectorAll(".search-field");
+const popups = document.querySelectorAll(".popup-panel");
 
+searchFields.forEach(field => {
+    field.addEventListener("click", () => {
+        popups.forEach(popup => popup.style.display = "none");
 
-renderTabs();
+        const id = field.id.replace("field-", "") + "-popup";
+        const popup = document.getElementById(id);
+
+        if (popup) {
+            popup.style.display = "block";
+        }
+    });
+});
+
 renderCategories();
 renderListings();
 </script>
