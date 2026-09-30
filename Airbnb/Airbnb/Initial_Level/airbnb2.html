@@ -102,10 +102,8 @@ button{font:inherit;cursor:pointer;background:none;border:none;color:inherit}
 .wrap{max-width:1760px;margin:0 auto;padding:0 40px}
 .cat-bar{display:flex;gap:32px;overflow-x:auto;scrollbar-width:none;padding:18px 0 0;border-bottom:1px solid #ebebeb;margin-bottom:28px}
 .cat-bar::-webkit-scrollbar{display:none}
-.cat-item{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:8px;padding-bottom:12px;color:var(--mute);font-size:13px;font-weight:600;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
-.cat-item i{font-size:22px;transition:transform .2s var(--ease)}
+.cat-item{flex:0 0 auto;display:flex;align-items:center;padding:0 2px 12px;font-size:14px;color:var(--mute);font-size:13px;font-weight:600;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
 .cat-item:hover{color:#000;border-bottom-color:var(--line)}
-.cat-item:hover i{transform:scale(1.2)}
 .cat-item.active{color:#000;border-bottom-color:#000}
 
 /* ===== RAILS ===== */
@@ -326,7 +324,7 @@ const mk = (i, title, location, price, rating, cats, fav) =>
   ({ id:i, title, location, price, rating, categories:cats, favourite:!!fav,
      images:[0,1,2].map(k => U(P[(i+k*3)%P.length])) });
 const LISTINGS = [
-  mk(0,"Oceanfront villa","Malibu, California",18500,4.92,["beachfront","luxe","trending","pools"],1),
+  mk(0,"Sea-view villa","Varkala, Kerala",18500,4.92,["beachfront","luxe","trending","pools"],1),
   mk(1,"Cliffside beach house","North Goa, Goa",12400,4.88,["beachfront","views","trending"]),
   mk(2,"Cosy pine cabin","Munnar, Kerala",6200,4.95,["cabins","mountains","views"],1),
   mk(3,"Countryside farmhouse","Coorg, Karnataka",5400,4.83,["countryside","cabins"]),
@@ -449,7 +447,7 @@ renderGuests();
    CATEGORIES
    ===================================================== */
 $("cat-bar").innerHTML = CATEGORIES.map(c =>
-  `<button class="cat-item ${c.key==="all"?"active":""}" data-cat="${c.key}"><i class="fa-solid ${c.icon}"></i>${c.label}</button>`).join("");
+  `<button class="cat-item ${c.key==="all"?"active":""}" data-cat="${c.key}">${c.label}</button>`).join("");
 $("cat-bar").addEventListener("click", e => {
   const b = e.target.closest(".cat-item"); if(!b) return;
   state.category = b.dataset.cat;
